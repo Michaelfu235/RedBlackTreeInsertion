@@ -1,0 +1,62 @@
+#include <iostream>
+#include <fstream>
+#include <cstring>
+
+using namespace std;
+
+class Node {
+  int data;
+  char color;
+  Node* left;
+  Node* right;
+  Node* parent;
+
+public:
+  Node(int newData){
+    data = newData;
+    color = 'R';
+    left = NULL;
+    right = NULL;
+    parent = NULL;
+  }
+
+  Node(){
+    color = 'R';
+    left = NULL;
+    right = NULL;
+    parent = NULL;
+  }
+  
+};
+
+void printTree(Node* tree, int depth, int fromwhere);
+
+int main(){
+  cout << "help" << endl;
+}
+
+
+void printTree(Node* tree, int depth, int fromwhere){
+  if(tree->data == -1){
+    cout << "tree is empty" << endl;
+    return;
+  }
+  if(tree->right != NULL){
+    printTree(tree->right, depth+1, 1);
+  }
+
+  for(int i = 0;i<depth-1;i++){
+    cout << "\t";
+  }
+  if(fromwhere==2){
+    cout << "\\____";
+  } else if(fromwhere == 1){
+    cout << "/▔▔▔▔▔";
+    cout << tree->data << " color: " << tree->color << endl;
+  }
+
+  if(tree->left != NULL){
+    printTree(tree->left, depth+1, 2);
+  }
+    
+}
