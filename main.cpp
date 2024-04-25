@@ -190,6 +190,7 @@ Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL, Node* &
   if(root == NULL){
     Node* newNode = new Node(data);
     root = newNode;
+    
     return newNode;
   } else if (data < root->data){
     root->left = add(root->left, data, LL, RR, LR, RL, actualRoot);
