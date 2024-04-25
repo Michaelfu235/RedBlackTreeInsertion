@@ -58,6 +58,7 @@ int main(){
 
   while(justKeepGoing){
     cout << "enter a command: ADD(A), PRINT(P), or QUIT(Q)" << endl;
+    cout << "Add by console and file are both in ADD" << endl;
     cin >> inputt;
 
     if(strcmp(inputt, "A") == 0){
