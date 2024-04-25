@@ -41,7 +41,7 @@ Node* rotateRight(Node* node);
 //void rotateLeft(Node* &root, Node* &node);
 //void rotateRight(Node* &root, Node* &node);
 Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL, Node* &actualRoot);
-void checkTree(Node* &root, Node* &nnode);
+//void checkTree(Node* &root, Node* &nnode);
 
 
 int main(){
@@ -52,49 +52,63 @@ int main(){
   bool LR = false;
   bool RL = false;
 
-  add(root, 4, LL, RR, LR, RL, root);
-  //checkTree(root, root);
-  printTree(root, 0, 0);
-  cout << "----------------------------------" << endl;
+  
+  bool justKeepGoing = true;
+  char inputt[15];
 
-  add(root, 5, LL, RR, LR, RL, root);
-  //checkTree(root, root);
-  printTree(root, 0, 0);
-  cout << "----------------------------------" << endl;
+  while(justKeepGoing){
+    cout << "enter a command: ADD(A), PRINT(P), or QUIT(Q)" << endl;
+    cin >> inputt;
 
-  add(root, 7, LL, RR, LR, RL, root);
-  //checkTree(root, root);
-  printTree(root, 0, 0);
-  cout << "----------------------------------" << endl;
+    if(strcmp(inputt, "A") == 0){
+      cout << "input type? (FILE or CONSOLE)" << endl;
+      cin >> inputt;
+      if(strcmp(inputt, "FILE")==0){
 
-  add(root, 8, LL, RR, LR, RL, root);
-  //checkTree(root, root);
-  printTree(root, 0, 0);
-  cout << "----------------------------------" << endl;
+	char* fileName = new char[80];
+      
+	cout << "what's the name of the file you want to add (include the .txt)" << endl;
+	cin >> fileName;
+	cin.ignore();
+	fstream file;
+	file.open(fileName);
+	int inpit = 0;
+	while(file >> inpit){
+	  add(root, inpit, LL, RR, LR, RL, root);
+	}
+	file.close();
+      
+      } else if (strcmp(inputt, "CONSOLE")==0){
+	bool justKeepGoingtwo = true;
+	char input[10];
+      
+	while(justKeepGoingtwo){
+	  cout << "enter numbers from 1-999, or \"DONE\" when done" << endl;
+	  
+	  cin >> input;
+	  if(strcmp(input, "DONE")==0){
+	    justKeepGoingtwo = false;
+	  } else {
+	    int num = atoi(input);
+	    add(root, num, LL, RR, LR, RL, root);
+	  }
+	}
+      }
+    } else if (strcmp(inputt, "P")==0){
+      printTree(root, 0, 0);
+    } else if (strcmp(inputt, "Q")==0){
+      justKeepGoing = false;
+    }
+  }
 
-  add(root, 9, LL, RR, LR, RL, root);
-  //checkTree(root, root);
-  printTree(root, 0, 0);
-  cout << "----------------------------------" << endl;
 
-  add(root, 3, LL, RR, LR, RL, root);
-  //checkTree(root, root);
-  printTree(root, 0, 0);
-  cout << "----------------------------------" << endl;
-
-  add(root, 1, LL, RR, LR, RL, root);
-  //checkTree(root, root);
-  printTree(root, 0, 0);
-  cout << "----------------------------------" << endl;
-
-
-  printTree(root, 0, 0);
+  
   
 }
 
 
 void printTree(Node* tree, int depth, int fromwhere){
-  if(tree->data == -1){
+  if(tree == NULL){
     cout << "tree is empty" << endl;
     return;
   }
@@ -299,7 +313,7 @@ Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL, Node* &
   
 }
 
-
+/*
 void checkTree(Node* &root, Node* &nnode){
   Node* parent = NULL;
   Node* grandpa = NULL;
@@ -350,4 +364,4 @@ void checkTree(Node* &root, Node* &nnode){
     }
   }
   root->color = 'B';
-}
+  }*/
