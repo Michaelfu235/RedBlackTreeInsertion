@@ -206,7 +206,8 @@ Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL, Node* &
     root = newNode;
     
     return newNode;
-  } else if (data < root->data){
+  } else if (data < root->data){//for checkTree, just start with this else if stsatement (as an if statement) and change it so it just checks if theres an RR, then set f to true, then move past to if LL... (maybe change that if it doesnt work, we'll see)
+    //NOTE: ^This comment is just for me in the future
     root->left = add(root->left, data, LL, RR, LR, RL, actualRoot);
     root->left->parent = root;
     if(root != actualRoot){
