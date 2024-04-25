@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//class + constructors
 class Node {
 
 public:
@@ -33,6 +34,7 @@ public:
   
 };
 
+//function prototypes
 void printTree(Node* tree, int depth, int fromwhere);
 
 Node* rotateLeft(Node* node);
@@ -56,6 +58,7 @@ int main(){
   bool justKeepGoing = true;
   char inputt[15];
 
+  //asking for user input loop with add by file, console, printing tree, and quit
   while(justKeepGoing){
     cout << "enter a command: ADD(A), PRINT(P), or QUIT(Q)" << endl;
     cout << "Add by console and file are both in ADD" << endl;
@@ -108,6 +111,7 @@ int main(){
 }
 
 
+//printtree function (prints the color of the node after the number
 void printTree(Node* tree, int depth, int fromwhere){
   if(tree == NULL){
     cout << "tree is empty" << endl;
@@ -133,7 +137,7 @@ void printTree(Node* tree, int depth, int fromwhere){
     
 }
 
-/*
+/* unused function (completely wrong or smth) (keeping in case of debugging)
 void rotateLeft(Node* &root, Node* &node){
   Node* y = node->right;
   node->right = y->left;
@@ -176,7 +180,7 @@ Node* rotateRight(Node* node){
   return x;
 }
 
-/*
+/*unused function (compeltely wrong or smth) (keeping in case of debugging)
 void rotateRight(Node* &root, Node* &node){
   Node* y = node->left;
   node->left = y->right;
@@ -197,6 +201,7 @@ void rotateRight(Node* &root, Node* &node){
   }*/
 
 
+//add function that checks the tree inside the add function
 Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL, Node* &actualRoot){
 
   
@@ -289,6 +294,9 @@ Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL, Node* &
     actualRoot->color = 'B';
   }
   return root;
+
+
+  //previous version that didnt work (keeping it in case of debugging)
   /*/Node* temp = root->left;
       //return add (temp, data, LL, RR, LR, RL);
     } else if (data < root->data && root->left == NULL){
