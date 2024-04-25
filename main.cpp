@@ -34,9 +34,13 @@ public:
 };
 
 void printTree(Node* tree, int depth, int fromwhere);
-void rotateLeft(Node* &root, Node* &node);
-void rotateRight(Node* &root, Node* &node);
-Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL);
+
+Node* rotateLeft(Node* node);
+Node* rotateRight(Node* node);
+
+//void rotateLeft(Node* &root, Node* &node);
+//void rotateRight(Node* &root, Node* &node);
+Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL, Node* &actualRoot);
 void checkTree(Node* &root, Node* &nnode);
 
 
@@ -48,38 +52,38 @@ int main(){
   bool LR = false;
   bool RL = false;
 
-  add(root, 4, LL, RR, LR, RL);
-  checkTree(root, root);
+  add(root, 4, LL, RR, LR, RL, root);
+  //checkTree(root, root);
   printTree(root, 0, 0);
   cout << "----------------------------------" << endl;
 
-  add(root, 5, LL, RR, LR, RL);
-  checkTree(root, root);
+  add(root, 5, LL, RR, LR, RL, root);
+  //checkTree(root, root);
   printTree(root, 0, 0);
   cout << "----------------------------------" << endl;
 
-  add(root, 7, LL, RR, LR, RL);
-  checkTree(root, root);
+  add(root, 7, LL, RR, LR, RL, root);
+  //checkTree(root, root);
   printTree(root, 0, 0);
   cout << "----------------------------------" << endl;
 
-  add(root, 8, LL, RR, LR, RL);
-  checkTree(root, root);
+  add(root, 8, LL, RR, LR, RL, root);
+  //checkTree(root, root);
   printTree(root, 0, 0);
   cout << "----------------------------------" << endl;
 
-  add(root, 9, LL, RR, LR, RL);
-  checkTree(root, root);
+  add(root, 9, LL, RR, LR, RL, root);
+  //checkTree(root, root);
   printTree(root, 0, 0);
   cout << "----------------------------------" << endl;
 
-  add(root, 3, LL, RR, LR, RL);
-  checkTree(root, root);
+  add(root, 3, LL, RR, LR, RL, root);
+  //checkTree(root, root);
   printTree(root, 0, 0);
   cout << "----------------------------------" << endl;
 
-  add(root, 1, LL, RR, LR, RL);
-  checkTree(root, root);
+  add(root, 1, LL, RR, LR, RL, root);
+  //checkTree(root, root);
   printTree(root, 0, 0);
   cout << "----------------------------------" << endl;
 
@@ -114,7 +118,7 @@ void printTree(Node* tree, int depth, int fromwhere){
     
 }
 
-
+/*
 void rotateLeft(Node* &root, Node* &node){
   Node* y = node->right;
   node->right = y->left;
@@ -132,8 +136,32 @@ void rotateLeft(Node* &root, Node* &node){
   }
   y->left = node;
   node->parent = y;
+  }*/
+
+Node* rotateLeft(Node* node) {
+  Node* x = node->right;
+  Node* y = x->left;
+  x->left = node;
+  node->right = y;
+  node->parent = x;
+  if (y != NULL)
+    y->parent = node;
+  return x;
 }
 
+Node* rotateRight(Node* node){
+  Node* x = node->left;
+  Node* y = x->right;
+  x->right = node;
+  node->left = y;
+  node->parent = x;
+  if(y != NULL){
+    y->parent = node;
+  }
+  return x;
+}
+
+/*
 void rotateRight(Node* &root, Node* &node){
   Node* y = node->left;
   node->left = y->right;
@@ -151,20 +179,101 @@ void rotateRight(Node* &root, Node* &node){
   }
   y->right = node;
   node->parent = y;
-}
+  }*/
 
 
-Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL){
+Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL, Node* &actualRoot){
+
+  
+  bool f = false;
   
   if(root == NULL){
     Node* newNode = new Node(data);
     root = newNode;
-    return root;
+    return newNode;
+  } else if (data < root->data){
+    root->left = add(root->left, data, LL, RR, LR, RL, actualRoot);
+    root->left->parent = root;
+    if(root != actualRoot){
+      if(root->color == 'R' && root->left->color == 'R'){
+	f = true;
+      }
+    }
   } else {
-    bool isRedRed = false;
-    if(data < root->data && root->left != NULL){
-      Node* temp = root->left;
-      return add (temp, data, LL, RR, LR, RL);
+    root->right = add(root->right, data, LL, RR, LR, RL, actualRoot);
+    root->right->parent = root;
+    if(root != actualRoot){
+      if(root->color == 'R' && root->right->color == 'R'){
+	f = true;
+      }
+    }
+  }
+
+  if(LL){
+    root = rotateLeft(root);
+    root->color = 'B';
+    root->left->color = 'R';
+    LL = false;
+  } else if (RR){
+    root = rotateRight(root);
+    root->color = 'B';
+    root->right->color = 'R';
+    RR = false;
+  } else if (RL){
+    root->right = rotateRight(root->right);
+    root->right->parent = root;
+    root = rotateLeft(root);
+    root->color = 'B';
+    root->left->color = 'R';
+    RL = false;
+  } else if (LR){
+    root->left = rotateLeft(root->left);
+    root->left->parent = root;
+    root = rotateRight(root);
+    root->color = 'B';
+    root->right->color = 'R';
+    LR = false;
+  }
+
+  if(f == true){
+    if(root->parent->right == root){
+      if(root->parent->left == NULL || root->parent->left->color == 'B'){
+	if(root->left != NULL && root->left->color == 'R'){
+	  RL = true;
+	} else if (root->right != NULL && root->right->color == 'R'){
+	  LL = true;
+	}
+      } else {
+	root->parent->left->color = 'B';
+	root->color = 'B';
+	if(root->parent != actualRoot) {
+	  root->parent->color = 'R';
+	}
+      }
+    } else {
+      if(root->parent->right == NULL || root->parent->right->color == 'B'){
+	if(root->left != NULL && root->left->color == 'R'){
+	  RR = true;
+	} else if (root->right != NULL && root->right->color == 'R'){
+	  LR = true;
+	}
+      } else {
+	root->parent->right->color = 'B';
+	root->color = 'B';
+	if(root->parent != actualRoot){
+	  root->parent->color = 'R';
+	}
+      }
+    }
+    f = false;
+  }
+
+  if(actualRoot != NULL){
+    actualRoot->color = 'B';
+  }
+  return root;
+  /*/Node* temp = root->left;
+      //return add (temp, data, LL, RR, LR, RL);
     } else if (data < root->data && root->left == NULL){
       Node* newNode = new Node(data);
       root->left = newNode;
@@ -186,8 +295,7 @@ Node* add(Node* &root, int data, bool &LL, bool &RR, bool &LR, bool &RL){
     root->left = newNode;
     newNode->parent = root;
     return newNode;*/
-  }
-  return NULL;
+  
 }
 
 
@@ -208,11 +316,11 @@ void checkTree(Node* &root, Node* &nnode){
 	nnode = grandpa;
       } else {
 	if(nnode == parent->right){
-	  rotateLeft(root, parent);
+	  //rotateLeft(root, parent);
 	  nnode = parent;
 	  parent = nnode->parent;
 	}
-	rotateRight(root, grandpa);
+	//rotateRight(root, grandpa);
 	parent->color = 'B';
 	grandpa->color = 'R';
 	nnode = parent;
@@ -229,11 +337,11 @@ void checkTree(Node* &root, Node* &nnode){
       }
       else {
 	if(nnode == parent->left){
-	  rotateRight(root, parent);
+	  //rotateRight(root, parent);
 	  nnode = parent;
 	  parent = nnode->parent;
 	}
-	rotateLeft(root, grandpa);
+	//rotateLeft(root, grandpa);
 	parent->color = 'B';
 	grandpa->color = 'R';
 	nnode = parent;
