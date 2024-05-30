@@ -1,0 +1,11 @@
+int counttwo(Node* root){
+  if(root->left != NULL && root->right != NULL){
+    return (1+counttwo(root->left) + counttwo(root->right));
+  } else if (root->left != NULL && root->right == NULL){
+    return counttwo(root->left);
+  } else if (root->right != NULL && root->left == NULL){
+    return counttwo(root->right);
+  } else {
+    return 0;
+  }
+}
